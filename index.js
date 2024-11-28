@@ -28,7 +28,7 @@ app.use(
     maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000,
     keys: [process.env.SESSION_SECRET],
     secure: process.env.NODE_ENV === "production", // Only secure cookies in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Adjust based on environment
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin cookies in production
     httpOnly: true, // Prevent client-side access to the cookie
   })
 );
@@ -39,17 +39,20 @@ app.use(express.json());
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Frontend URL
-    credentials: true, // Include cookies in CORS
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"], 
+    origin: process.env.CLIENT_URL, // Frontend URL in production
+    credentials: true, // Allow cookies in cross-origin requests
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
 );
+
+// Middleware to handle preflight requests
+app.options("*", cors());
 
 // Load routes
 app.use("/", require("./routes"));
 
-// Start server
+// Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, (err) => {
   if (err) {
