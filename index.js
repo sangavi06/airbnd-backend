@@ -6,10 +6,10 @@ const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const cloudinary = require("cloudinary").v2;
 
-// connect with database
+// Connect to database
 connectWithDB();
 
-// cloudinary configuration
+// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -18,7 +18,7 @@ cloudinary.config({
 
 const app = express();
 
-// For handling cookies
+// Handle cookies
 app.use(cookieParser());
 
 // Initialize cookie-session middleware
@@ -27,13 +27,13 @@ app.use(
     name: "session",
     maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000,
     keys: [process.env.SESSION_SECRET],
-    secure: true, // Only send over HTTPS
-    sameSite: "none", // Allow cross-origin requests
-    httpOnly: true, // Makes the cookie accessible only on the server-side
+    secure: true,
+    sameSite: "none",
+    httpOnly: true,
   })
 );
 
-// Middleware to handle JSON
+// Parse JSON requests
 app.use(express.json());
 
 // CORS configuration
@@ -54,9 +54,9 @@ app.use("/", require("./routes"));
 
 app.listen(process.env.PORT || 8000, (err) => {
   if (err) {
-    console.log("Error in connecting to server: ", err);
+    console.log("Error connecting to server: ", err);
   }
-  console.log(`Server is running on port no. ${process.env.PORT}`);
+  console.log(`Server running on port ${process.env.PORT}`);
 });
 
 module.exports = app;
