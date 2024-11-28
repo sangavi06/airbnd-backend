@@ -6,10 +6,10 @@ const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const cloudinary = require("cloudinary").v2;
 
-// Connect to the database
+// connect with database
 connectWithDB();
 
-// Cloudinary configuration
+// cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -18,18 +18,18 @@ cloudinary.config({
 
 const app = express();
 
-// Parse cookies
+// For handling cookies
 app.use(cookieParser());
 
 // Initialize cookie-session middleware
 app.use(
   cookieSession({
     name: "session",
-    maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000, // Cookie expiry in ms
+    maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000,
     keys: [process.env.SESSION_SECRET],
-    secure: process.env.NODE_ENV === "production", // Secure cookies in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-origin settings
-    httpOnly: true, // Prevent client-side access to the cookie
+    secure: process.env.NODE_ENV === "production", // Only send over HTTPS in production
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin requests in production
+    httpOnly: true, // Makes the cookie accessible only on the server-side
   })
 );
 
@@ -39,26 +39,24 @@ app.use(express.json());
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.VITE_BASE_URL, // Use VITE_BASE_URL from environment
-    credentials: true, // Allow credentials (cookies) in cross-origin requests
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+    origin: process.env.CLIENT_URL, // Frontend URL
+    credentials: true, // Allow cookies and credentials
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
 );
 
-// Middleware to handle preflight requests
-app.options("*", cors());
-
-// Load routes
+// Use express router
 app.use("/", require("./routes"));
 
 // Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, (err) => {
   if (err) {
-    console.error("Error starting server:", err);
+    console.error("Error in connecting to server: ", err);
+  } else {
+    console.log(`Server is running on port ${PORT}`);
   }
-  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;
