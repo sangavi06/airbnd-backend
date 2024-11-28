@@ -18,6 +18,8 @@ cloudinary.config({
 
 const app = express();
 
+app.use(cors({ origin: "*" }));
+
 // For handling cookies
 app.use(cookieParser());
 
@@ -37,7 +39,7 @@ app.use(
 app.use(express.json());
 
 // CORS
-app.use(cors({ origin: "*" }));
+
 
 app.use("/health", (req, res) => {
   res.status(200).end();
