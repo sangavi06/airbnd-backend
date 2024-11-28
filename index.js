@@ -18,7 +18,7 @@ cloudinary.config({
 
 const app = express();
 
-app.use(cors({ origin: "https://airpnb-frontend.netlify.app" }));
+app.use(cors({ origin: "*" }));
 
 // For handling cookies
 app.use(cookieParser());
