@@ -25,10 +25,10 @@ app.use(cookieParser());
 app.use(
   cookieSession({
     name: "session",
-    maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000,
+    maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000, // Cookie expiry in ms
     keys: [process.env.SESSION_SECRET],
-    secure: process.env.NODE_ENV === "production", // Only secure cookies in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin cookies in production
+    secure: process.env.NODE_ENV === "production", // Secure cookies in production
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-origin settings
     httpOnly: true, // Prevent client-side access to the cookie
   })
 );
@@ -39,8 +39,8 @@ app.use(express.json());
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Frontend URL in production
-    credentials: true, // Allow cookies in cross-origin requests
+    origin: process.env.VITE_BASE_URL, // Use VITE_BASE_URL from environment
+    credentials: true, // Allow credentials (cookies) in cross-origin requests
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
