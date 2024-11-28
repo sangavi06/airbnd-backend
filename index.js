@@ -37,13 +37,11 @@ app.use(
 app.use(express.json());
 
 // CORS
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
+app.use(cors({ origin: "*" }));
 
+app.use("/health", (req, res) => {
+  res.status(200).end();
+});
 // use express router
 app.use("/", require("./routes"));
 
