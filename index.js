@@ -44,12 +44,11 @@ app.use(
 //   })
 // );
 
-app.use(express.json()); 
 app.use(
   cors({
     origin: [
       process.env.CLIENT_URL,
-      'https://airpnb-frontend.netlify.app' // 
+      'https://airbnd-frontend.netlify.app' 
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
