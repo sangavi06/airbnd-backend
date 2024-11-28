@@ -33,30 +33,23 @@ app.use(
   })
 );
 
-// middleware to handle json
-// app.use(express.json());
+// Middleware to handle JSON
+app.use(express.json());
 
-// CORS
-// app.use(
-//   cors({
-//     origin: process.env.CLIENT_URL,
-//     credentials: true,
-//   })
-// );
-
+// CORS configuration
 app.use(
   cors({
     origin: [
       process.env.CLIENT_URL,
-      'https://airbnd-frontend.netlify.app' 
+      "https://airbnb-frontend.netlify.app",
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// use express router
+// Use express router
 app.use("/", require("./routes"));
 
 app.listen(process.env.PORT || 8000, (err) => {
