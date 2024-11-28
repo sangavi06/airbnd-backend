@@ -27,36 +27,31 @@ app.use(
     name: "session",
     maxAge: process.env.COOKIE_TIME * 24 * 60 * 60 * 1000,
     keys: [process.env.SESSION_SECRET],
-    secure: process.env.NODE_ENV === "production", // Only send over HTTPS in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin cookies in production
+    secure: true, // Only send over HTTPS
+    sameSite: "none", // Allow cross-origin requests
     httpOnly: true, // Makes the cookie accessible only on the server-side
   })
 );
 
-// Middleware to parse JSON
+// middleware to handle json
 app.use(express.json());
 
-// CORS Configuration
+// CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Frontend live URL
-    credentials: true, // Allow cookies in requests
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    origin: process.env.CLIENT_URL,
+    credentials: true,
   })
 );
 
-// Use express router
+// use express router
 app.use("/", require("./routes"));
 
-// Start the server
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, (err) => {
+app.listen(process.env.PORT || 8000, (err) => {
   if (err) {
-    console.error("Error in connecting to server: ", err);
-  } else {
-    console.log(`Server is running on port ${PORT}`);
+    console.log("Error in connecting to server: ", err);
   }
+  console.log(`Server is running on port no. ${process.env.PORT}`);
 });
 
 module.exports = app;
