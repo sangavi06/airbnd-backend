@@ -34,13 +34,26 @@ app.use(
 );
 
 // middleware to handle json
-app.use(express.json());
+// app.use(express.json());
 
 // CORS
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     credentials: true,
+//   })
+// );
+
+app.use(express.json()); 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [
+      process.env.CLIENT_URL,
+      'https://airpnb-frontend.netlify.app' // 
+    ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
 
