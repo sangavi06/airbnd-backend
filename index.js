@@ -33,20 +33,38 @@ app.use(
   })
 );
 
-// middleware to handle json
+// Middleware to handle JSON
 app.use(express.json());
 
-// CORS
+// CORS Configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
+    origin: process.env.CLIENT_URL, // Allow only your client
+    credentials: true, // Enable cookies and authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow custom headers
   })
 );
 
-// use express router
+// Explicitly set headers for preflight requests (OPTIONS)
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.sendStatus(200);
+});
+
+// Use express router
 app.use("/", require("./routes"));
 
+// Start server
 app.listen(process.env.PORT || 8000, (err) => {
   if (err) {
     console.log("Error in connecting to server: ", err);
